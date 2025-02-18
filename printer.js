@@ -56,23 +56,36 @@ class Printer {
         this.printList.commands.push(command);  // Añadir el comando al array
     }
 
-    // Método para enviar los comandos al servidor
     sendCommands() {
         return new Promise((resolve, reject) => {
             if (this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify(this.printList));  // Enviar el JSON completo
+                this.ws.send(JSON.stringify(this.printList));
                 console.log('Comandos enviados:', JSON.stringify(this.printList));
-                resolve();  // Confirmar que se enviaron los comandos
+                resolve();
             } else {
                 console.log('Esperando conexión WebSocket...');
-                this.ws.once('open', () => {
-                    this.ws.send(JSON.stringify(this.printList));  // Enviar el JSON cuando la conexión esté abierta
+    
+                const sendData = () => {
+                    this.ws.send(JSON.stringify(this.printList));
                     console.log('Comandos enviados:', JSON.stringify(this.printList));
                     resolve();
-                });
+                };
+    
+                if (typeof window !== 'undefined' && window.WebSocket) {
+                    // Entorno navegador
+                    const onOpen = () => {
+                        sendData();
+                        this.ws.removeEventListener('open', onOpen);
+                    };
+                    this.ws.addEventListener('open', onOpen);
+                } else {
+                    // Entorno Node.js
+                    this.ws.once('open', sendData);
+                }
             }
         });
     }
+    
 
     // Funciones correspondientes a cada acción
     printText(text) {
