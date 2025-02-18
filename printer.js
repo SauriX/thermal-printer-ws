@@ -2,28 +2,34 @@ const WebSocket = require('ws');
 class Printer {
     constructor(printerName) {
         this.printerName = printerName;
-        this.ws = new WebSocket('ws://localhost:9090');
+        if (typeof window !== 'undefined' && window.WebSocket) {
+            // Si estás en el navegador, usa la API WebSocket nativa
+            this.ws = new WebSocket('ws://localhost:9090');
+        } else {
+            // Si estás en Node.js, usa la librería ws
+            const WebSocket = require('ws');
+            this.ws = new WebSocket('ws://localhost:9090');
+        }
 
-        // Inicializar el objeto principal que contendrá el JSON
         this.printList = {
             printerName: this.printerName,
-            commands: []  // Aquí se agregarán los comandos
+            commands: [] // Aquí se agregarán los comandos
         };
 
-        // Esperar a que la conexión se abra
-        this.ws.on('open', () => {
+        // Manejar la conexión abierta
+        this.ws.onopen = () => {
             console.log(`Conectado a la impresora: ${this.printerName}`);
-        });
+        };
 
-        // Manejar respuestas del servidor
-        this.ws.on('message', (data) => {
-            console.log('Mensaje del servidor:', data);
-        });
+        // Manejar mensajes del servidor
+        this.ws.onmessage = (event) => {
+            console.log('Mensaje del servidor:', event.data);
+        };
 
         // Manejar errores
-        this.ws.on('error', (err) => {
-            console.error('Error WebSocket:', err);
-        });
+        this.ws.onerror = (error) => {
+            console.error('Error WebSocket:', error);
+        };
     }
 
     // Método para agregar un comando
@@ -96,7 +102,7 @@ class Printer {
     }
 
     separator(text) {
-        this.addCommand('separator', text || '' );
+        this.addCommand('separator', text || '');
     }
 
     bold(text) {
