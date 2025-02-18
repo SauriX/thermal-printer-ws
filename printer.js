@@ -1,33 +1,45 @@
 class Printer {
     constructor(printerName) {
         this.printerName = printerName;
-        if (typeof window !== 'undefined' && window.WebSocket) {
-            // Si estás en el navegador, usa la API WebSocket nativa
+
+        if (typeof window !== 'undefined') {
+            // Estamos en el navegador: usar WebSocket nativo
             this.ws = new WebSocket('ws://localhost:9090');
+
+            this.ws.addEventListener('open', () => {
+                console.log(`Conectado a la impresora: ${this.printerName}`);
+            }, { once: true });
+
+            this.ws.addEventListener('message', (event) => {
+                console.log('Mensaje del servidor:', event.data);
+            });
+
+            this.ws.addEventListener('error', (error) => {
+                console.error('Error WebSocket:', error);
+            });
+
         } else {
-            // Si estás en Node.js, usa la librería ws
+            // Estamos en Node.js: usar la librería 'ws'
             const WebSocket = require('ws');
             this.ws = new WebSocket('ws://localhost:9090');
+
+            this.ws.on('open', () => {
+                console.log(`Conectado a la impresora: ${this.printerName}`);
+            });
+
+            this.ws.on('message', (data) => {
+                console.log('Mensaje del servidor:', data.toString());
+            });
+
+            this.ws.on('error', (error) => {
+                console.error('Error WebSocket:', error);
+            });
         }
 
+        // Inicializar la lista de comandos
         this.printList = {
             printerName: this.printerName,
             commands: [] // Aquí se agregarán los comandos
-        };
-
-        // Manejar la conexión abierta
-        this.ws.onopen = () => {
-            console.log(`Conectado a la impresora: ${this.printerName}`);
-        };
-
-        // Manejar mensajes del servidor
-        this.ws.onmessage = (event) => {
-            console.log('Mensaje del servidor:', event.data);
-        };
-
-        // Manejar errores
-        this.ws.onerror = (error) => {
-            console.error('Error WebSocket:', error);
         };
     }
 
