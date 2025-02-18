@@ -57,21 +57,132 @@ class Printer {
         });
     }
 
-    // Métodos específicos de impresión, que llaman a addCommand
-
+    // Funciones correspondientes a cada acción
     printText(text) {
         this.addCommand('text', text);
     }
 
-    printBold(text) {
-        this.addCommand('bold', text);
+    cutPartial() {
+        this.addCommand('partial');
     }
 
-    testPrinter() {
-        console.log("Test de impresora");
+    cutFull() {
+        this.addCommand('full');
+    }
+
+    printDocument() {
         this.addCommand('printDocument');
         this.sendCommands();
     }
+
+    testPrinter() {
+        this.addCommand('testPrinter');
+    }
+
+    code123(text) {
+        this.addCommand('code123', text);
+    }
+
+    code39(text) {
+        this.addCommand('code39', text);
+    }
+
+    ean13(text) {
+        this.addCommand('ean13', text);
+    }
+
+    openDrawer() {
+        this.addCommand('openDrawer');
+    }
+
+    separator(text) {
+        this.addCommand('separator', text || '' );
+    }
+
+    bold(text) {
+        this.addCommand('bold', text);
+    }
+
+    underLine(text) {
+        this.addCommand('underLine', text);
+    }
+
+    expanded(mode) {
+        this.addCommand('expanded', null, 0, mode);
+    }
+
+    condensed(mode) {
+        this.addCommand('condensed', null, 0, mode);
+    }
+
+    doubleWidth2() {
+        this.addCommand('doubleWidith2');
+    }
+
+    doubleWidth3() {
+        this.addCommand('doubleWidith3');
+    }
+
+    normalWidth() {
+        this.addCommand('normalWidith2');
+    }
+
+    alignRight() {
+        this.addCommand('rigth');
+    }
+
+    alignCenter() {
+        this.addCommand('center');
+    }
+
+    alignLeft() {
+        this.addCommand('left');
+    }
+
+    fontA(text) {
+        this.addCommand('fontA', text);
+    }
+
+    fontB(text) {
+        this.addCommand('fontB', text);
+    }
+
+    fontC(text) {
+        this.addCommand('fontC', text);
+    }
+
+    fontD(text) {
+        this.addCommand('fontD', text);
+    }
+
+    fontE(text) {
+        this.addCommand('fontE', text);
+    }
+
+    fontEspecialA(text) {
+        this.addCommand('fontEspecialA', text);
+    }
+
+    fontEspecialB(text) {
+        this.addCommand('fontEspecialB', text);
+    }
+
+    initializePrint() {
+        this.addCommand('initializePrint');
+    }
+
+    lineHeight(count) {
+        this.addCommand('lineHeigth', null, count);
+    }
+
+    newLines(count) {
+        this.addCommand('newLines', null, count);
+    }
+
+    newLine() {
+        this.addCommand('newLine');
+    }
 }
+
 
 module.exports = Printer;
