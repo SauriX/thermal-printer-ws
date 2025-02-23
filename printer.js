@@ -1,17 +1,17 @@
 class Printer {
-    constructor(printerName) {
+    constructor(printerName,ip="localhost") {
         this.printerName = printerName;
 
         if (typeof window !== 'undefined') {
             // Estamos en el navegador: usar WebSocket nativo
-            this.ws = new WebSocket('ws://localhost:9090');
+            this.ws = new WebSocket(`ws://${ip}:9090`);
 
             this.ws.addEventListener('open', () => {
                 console.log(`Conectado a la impresora: ${this.printerName}`);
             }, { once: true });
 
             this.ws.addEventListener('message', (event) => {
-                console.log('Mensaje del servidor:', event.data);
+                
             });
 
             this.ws.addEventListener('error', (error) => {
@@ -21,14 +21,13 @@ class Printer {
         } else {
             // Estamos en Node.js: usar la librería 'ws'
             const WebSocket = require('ws');
-            this.ws = new WebSocket('ws://localhost:9090');
+            this.ws = new WebSocket(`ws://${ip}:9090`);
 
             this.ws.on('open', () => {
                 console.log(`Conectado a la impresora: ${this.printerName}`);
             });
 
             this.ws.on('message', (data) => {
-                console.log('Mensaje del servidor:', data.toString());
             });
 
             this.ws.on('error', (error) => {
@@ -76,6 +75,50 @@ class Printer {
                     const onOpen = () => {
                         sendData();
                         this.ws.removeEventListener('open', onOpen);
+                    };
+                    this.ws.addEventListener('open', onOpen);
+                } else {
+                    // Entorno Node.js
+                    this.ws.once('open', sendData);
+                }
+            }
+        });
+    }
+    
+    getPrinters() {
+        return new Promise((resolve, reject) => {
+            if (this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send("printers");
+                console.log('Comando enviado:', "printers");
+    
+                // Escuchar la respuesta
+                this.ws.addEventListener("message", function onMessage(event) {
+                    console.log("Respuesta recibida:", event.data);
+                    
+                    // Eliminar el listener después de recibir la respuesta
+
+                    resolve(JSON.parse(event.data).printers); // Resolver la promesa con la respuesta
+                });
+            } else {
+                console.log('Esperando conexión WebSocket...');
+    
+                const sendData = () => {
+                    this.ws.send("printers");
+                    console.log('Comando enviado:', "printers");
+    
+                    // Escuchar la respuesta
+                    this.ws.addEventListener("message", function onMessage(event) {
+                        console.log("Respuesta recibida:", event.data);
+    
+
+                        resolve(JSON.parse(event.data).printers); // Resolver la promesa con la respuesta
+                    });
+                };
+    
+                if (typeof window !== 'undefined' && window.WebSocket) {
+                    // Entorno navegador
+                    const onOpen = () => {
+                        sendData();
                     };
                     this.ws.addEventListener('open', onOpen);
                 } else {

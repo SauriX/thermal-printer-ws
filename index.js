@@ -1,11 +1,21 @@
 const Printer = require('./printer');
 
 // Crear una instancia de la impresora
-const printer = new Printer("XP-58");
+const printer = new Printer(null,"localhost");
+
+const printer2 = new Printer("XP-58");
+
+const printer3 = new Printer();
 
 
+async function probando(){
+    var test = await printer.getPrinters();
+    console.log("test",test)
 
-// Inicializar la impresora
+} 
+probando();
+
+ // Inicializar la impresora
 printer.initializePrint();
 
 // Encabezado
@@ -52,4 +62,4 @@ printer.newLine();
 // Cortar el papel
 printer.cutFull();
 
-printer.printDocument();
+printer.printDocument(); 
