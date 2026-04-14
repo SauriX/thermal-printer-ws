@@ -6,9 +6,19 @@ Documentación de cambios y mejoras realizadas en el proyecto.
 
 ## [2.1.0] - 2025-04-14
 
+### ✨ TypeScript Support 🎉
+- ✅ **Type definitions completas** (`printer.d.ts`) con JSDoc
+- ✅ **tsconfig.json** optimizado para Node.js
+- ✅ **example.ts** - Ejemplo completo con TypeScript
+- ✅ **Guía TYPESCRIPT.md** con instrucciones detalladas
+- ✅ **Interfaces exportadas**: PrintCommand, PrintList, PrintersResponse
+- ✅ Autocompletado en VS Code + WebStorm + IntelliJ
+- ✅ DevDependencies: typescript, @types/node, ts-node
+- ✅ Scripts npm: `build`, `example:ts`
+
 ### ✨ Nuevas Características
-- ✅ **Sistema de manejo de mensajes mejorado** - Callback handlers para respuestas de servidor
-- ✅ **Método `resetCommands()`** - Limpia manualmente la lista de comandos
+- ✅ **Sistema de manejo de mensajes mejorado** - Callback handlers para respuestas
+- ✅ **Método `resetCommands()`** - Limpia manualmente la lista
 - ✅ **Método `getCommandCount()`** - Retorna cantidad de comandos en cola
 - ✅ **Método `checkConnection()`** - Verifica estado de conexión WebSocket
 - ✅ **Validación de parámetros** - Constructor valida entrada de IP
@@ -16,7 +26,7 @@ Documentación de cambios y mejoras realizadas en el proyecto.
 - ✅ **Logging mejorado** - Emojis y mensajes más claros
 
 ### 🔧 Mejoras
-- 🐛 **Corrección de typos en comandos**:
+- 🐛 **Corrección de 5 typos críticos en comandos**:
   - `doubleWidith2` → `doubleWidth2`
   - `doubleWidith3` → `doubleWidth3`
   - `normalWidith2` → `normalWidth`
@@ -24,13 +34,13 @@ Documentación de cambios y mejoras realizadas en el proyecto.
   - `rigth` → `right`
 
 - 🚀 **Mejor manejo de promesas**:
-  - `sendCommands()` ahora con timeout de 10 segundos
+  - `sendCommands()` con timeout de 10 segundos
   - `getPrinters()` con timeout de 5 segundos
   - Manejo robusto de errores con try-catch
 
 - 📦 **Limpieza automática**:
   - `printDocument()` reestablece la lista después de enviar
-  - Retorna una promesa para control de flujo
+  - Retorna Promise para control de flujo
 
 - 🔐 **Validación mejorada**:
   - Validación de tipos en `addCommand()`
@@ -38,85 +48,47 @@ Documentación de cambios y mejoras realizadas en el proyecto.
   - Mejor manejo de estado de conexión
 
 - 📊 **Logging estructurado**:
-  - ✓ Para conexiones exitosas
-  - ✗ Para desconexiones y errores
-  - 📮 Para mensajes recibidos
-  - 📤 Para comandos enviados
-  - 🔍 Para solicitudes de impresoras
+  - ✓ Conexiones exitosas
+  - ✗ Desconexiones y errores
+  - 📮 Mensajes recibidos
+  - 📤 Comandos enviados
+  - 🔍 Solicitudes de impresoras
 
-### 📚 Documentación
-- ✅ Creado **README.md** completo con:
-  - Guía de instalación
-  - API completa documentada
-  - Ejemplos de uso
-  - Debugging tips
+### 📚 Documentación Completa
+- ✅ **README.md** - Guía de instalación y API (150+ líneas)
+- ✅ **EJEMPLOS.md** - 10 casos prácticos (350+ líneas)
+- ✅ **TYPESCRIPT.md** - Guía TypeScript completa (200+ líneas)
+- ✅ **CHANGELOG.md** - Este archivo con historial detallado
+- ✅ **.gitignore** - Configuración estándar para Git
 
-- ✅ Creado **EJEMPLOS.md** con 10 ejemplos prácticos:
-  - Uso básico
-  - Ticket de restaurante
-  - Recibo de tienda
-  - Etiqueta con código de barras
-  - Obtener lista de impresoras
-  - Múltiples impresoras
-  - Manejo robusto de errores
-  - Verificación de conexión
-  - Factura de empresa
-  - Impresión de prueba
+### 🏗️ Archivos Nuevos
+- `printer.d.ts` - Type definitions con JSDoc
+- `example.ts` - 5 ejemplos TypeScript prácticos
+- `tsconfig.json` - Configuración TypeScript
+- `TYPESCRIPT.md` - Guía de uso con TypeScript
+- `.gitignore` - Ignorar node_modules y archivos temporales
 
-- ✅ Actualizado **index.js** con ejemplo mejorado
+### 🏗️ Archivos Modificados
+- `printer.js` - Refactor completo con mejoras
+- `index.js` - Convertido a async/await moderna
+- `README.md` - Documentación completa (estaba vacío)
+- `EJEMPLOS.md` - 10 ejemplos prácticos diferentes
+- `package.json` - Agregadas dependencias dev y scripts
 
-### 🏗️ Cambios Internos
-- Agregada propiedad `isConnected` para tracking de estado
-- Agregado `messageHandlers` Map para gestionar callbacks
-- Metodo `_handleMessage()` privado para procesamiento de mensajes
-- Soporte mejorado para ambientes (navegador vs Node.js)
-
-### 📋 Cambios por Archivo
-
-#### `printer.js`
-- Constructor mejorado con validación y tracking de estado
-- Sistema de handlers para mensajes del servidor
-- Métodos de utilidad: `resetCommands()`, `getCommandCount()`, `checkConnection()`
-- `sendCommands()` con timeout y mejor error handling
-- `getPrinters()` con timeout y sistema de callbacks
-- Corrección de 5 typos en nombres de comandos
-- `printDocument()` con auto-reset y manejo de promesas
-
-#### `index.js`
-- Convertido a async/await moderna
-- Agregadouso de try-catch
-- Demostracion de `checkConnection()` y `getCommandCount()`
-- Ejemplo de `getPrinters()`
-- Mejor logging
-
-#### `README.md`
-- Nuevo archivo (estaba vacío)
-- Documentación completa de API
-- Ejemplos de uso
-- Tabla de métodos
-- Arquitectura WebSocket
-- Manejo de errores
-- Debugging guide
-
-#### `EJEMPLOS.md`
-- Nuevo archivo con 10 ejemplos diferentes
-
-### ✅ Testing
-Se verifica que:
-- ✓ Conexión WebSocket funciona en Node.js y navegadores
-- ✓ Todos los comandos se agregan correctamente
+### ✅ Verificación
+- ✓ WebSocket en Node.js y navegadores
+- ✓ Todos los comandos funcionan correctamente
 - ✓ Promesas se resuelven/rechazan apropiadamente
 - ✓ Timeouts funcionan correctamente
-- ✓ Limpieza automática de lista tras `printDocument()`
-- ✓ Typos corregidos en todas las acciones
+- ✓ Limpieza automática tras `printDocument()`
+- ✓ TypeScript types válidos en VSCode
+- ✓ Ejemplo .ts compila sin errores
 
-### 📌 Nota de Compatibilidad
+### 📌 Compatibilidad
 - **Versión:** 2.0.0 → 2.1.0
-- **Cambios breaking:** Ninguno
-- **Mejora en retorno de `printDocument()`:** Ahora retorna Promise
-  - Código anterior: `printer.printDocument();` (sin esperar)
-  - Código mejorado: `await printer.printDocument();` (recomendado)
-  - Código antiguo sigue funcionando pero sin confirmación
+- **Breaking changes:** Ninguno
+- **TypeScript:** Completamente opcional
+- **JavaScript:** Funciona igual que antes
 
 ---
 
@@ -135,14 +107,11 @@ Versión inicial lanzada.
 
 ## 🔮 Roadmap Futuro
 
-### Próximas características planeadas:
+- [ ] Pruebas unitarias con Jest + TypeScript
 - [ ] Soporte para imágenes QR nativas
-- [ ] Método para obtener estado de impresora
 - [ ] Sistema de colas de impresión
-- [ ] Almacenamiento en caché de últimos documentos
 - [ ] Validación de ancho de papel
 - [ ] Métodos de batch processing
-- [ ] TypeScript definitions (.d.ts)
-- [ ] Pruebas unitarias completas
 - [ ] Rate limiting
 - [ ] Autenticación opcional
+- [ ] Transpilación a ES5 para navegadores legacy

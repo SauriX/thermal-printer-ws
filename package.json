@@ -1,10 +1,14 @@
 {
   "name": "thermal-printer-ws",
-  "version": "2.0.0",
-  "description": "A library for thermal printing",
+  "version": "2.1.0",
+  "description": "A library for thermal printing via WebSocket",
   "main": "printer.js",
+  "types": "printer.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "example": "node index.js",
+    "example:ts": "ts-node example.ts"
   },
   "author": "SauriX",
   "license": "MIT",
@@ -16,9 +20,20 @@
     "thermal-printer",
     "impressora",
     "node",
-    "js"
+    "js",
+    "typescript",
+    "websocket",
+    "escpos",
+    "thermal",
+    "printer"
   ],
   "dependencies": {
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
   }
 }
+
