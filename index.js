@@ -1,65 +1,104 @@
 const Printer = require('./printer');
 
-// Crear una instancia de la impresora
-const printer = new Printer(null,"localhost");
+/**
+ * Ejemplo de uso: Impresión de comanda de restaurante
+ * Demuestra las mejoras implementadas:
+ * - Manejo de promesas con try-catch
+ * - Limpieza automática de comandos
+ * - Manejo robusto de errores
+ */
 
-const printer2 = new Printer("XP-58");
+const printer = new Printer("Caja Principal", "localhost");
 
-const printer3 = new Printer();
+async function printOrderTicket() {
+    try {
+        // Verificar conexión
+        console.log(`Estado de conexión: ${printer.checkConnection() ? 'Conectado' : 'Desconectado'}`);
 
+        // Inicializar documento
+        printer.initializePrint();
 
-async function probando(){
-    var test = await printer.getPrinters();
-    console.log("test",test)
+        // Encabezado
+        printer.alignCenter();
+        printer.fontA('COMANDA #183270');
+        printer.newLine();
 
-} 
-probando();
+        printer.fontA('MESA: 12');
+        printer.newLine();
 
- // Inicializar la impresora
-printer.initializePrint();
+        // Productos
+        printer.alignLeft();
+        printer.fontB('2 Hamburguesas');
+        printer.newLine();
+        printer.fontB('1 Pizza Margherita');
+        printer.newLine();
 
-// Encabezado
-printer.alignCenter();
-printer.fontA('COMANDA #183270');  // Número de la comanda
-printer.newLine();
+        // Comentarios especiales
+        printer.alignLeft();
+        printer.fontC('* Sin cebolla');
+        printer.newLine();
+        printer.fontC('* Con extra de queso');
+        printer.newLine();
 
-printer.fontA('MESA: 12');  // Detalle de la mesa
-printer.newLine();
+        // Total
+        printer.alignCenter();
+        printer.fontB('TOTAL: $200.00');
+        printer.newLine();
 
-// Productos
-printer.alignLeft();
-printer.fontB('2 Hamburguesas');
-printer.newLine();
-printer.fontB('1 Pizza Margherita');
-printer.newLine();
+        // Separador
+        printer.separator('_');
+        printer.newLine();
 
-// Comentarios
-printer.alignLeft();
-printer.fontC('* Sin cebolla');
-printer.newLine();
-printer.fontC('* Con extra de queso');
-printer.newLine();
+        // Fecha y Auxiliar
+        printer.fontD('Fecha: 2025-02-18 15:30');
+        printer.newLine();
+        printer.fontD('Aux: Juan Pérez');
+        printer.newLine();
 
-// Total
-printer.alignCenter();
-printer.fontB('TOTAL: $200.00');
-printer.newLine();
+        // Finalizar impresión
+        printer.separator('_');
+        printer.newLine();
 
-// Separador
-printer.separator('_');
-printer.newLine();
+        // Cortar el papel
+        printer.cutFull();
 
-// Fecha y Auxiliar
-printer.fontD('Fecha: 2025-02-18 15:30');
-printer.newLine();
-printer.fontD('Aux: Juan Pérez');
-printer.newLine();
+        // Mostrar cantidad de comandos antes de enviar
+        console.log(`📋 Comandos en cola: ${printer.getCommandCount()}`);
 
-// Finalizar impresión
-printer.separator('_');
-printer.newLine();
+        // Enviar documento (automáticamente limpia la lista después)
+        await printer.printDocument();
+        
+        console.log('✓ Comanda impresa exitosamente');
+        console.log(`📋 Comandos después de envío: ${printer.getCommandCount()}`);
 
-// Cortar el papel
-printer.cutFull();
+    } catch (error) {
+        console.error('✗ Error al imprimir:', error.message);
+    }
+}
 
-printer.printDocument(); 
+/**
+ * Ejemplo: Obtener lista de impresoras disponibles
+ */
+async function checkAvailablePrinters() {
+    try {
+        const printers = await printer.getPrinters();
+        console.log('📲 Impresoras disponibles:', printers);
+    } catch (error) {
+        console.error('✗ Error al obtener impresoras:', error.message);
+    }
+}
+
+// Ejecutar ejemplo
+async function main() {
+    // Esperar a que se establezca la conexión
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Imprimir comanda
+    await printOrderTicket();
+    
+    // Verificar impresoras disponibles
+    console.log('\n--- Verificando impresoras disponibles ---\n');
+    await checkAvailablePrinters();
+}
+
+main().catch(console.error);
